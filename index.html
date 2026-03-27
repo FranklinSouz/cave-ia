@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Implante um Agente de IA na sua empresa | CAVE Assessoria</title>
+  <meta name="description" content="Enquanto você lê isso, seu concorrente já está usando IA para responder leads, qualificar clientes e fechar contratos — sem pagar um salário a mais." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #0a0a0a; --dark: #111111; --card: #181818; --border: #2a2a2a;
+      --orange: #FF5A00; --orange-light: #FF7A30; --white: #ffffff; --gray: #888888;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--black); color: var(--white); line-height: 1.6; overflow-x: hidden; }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 40px;
+      background: rgba(10,10,10,0.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; }
+    .nav-logo span { color: var(--orange); }
+    .nav-cta { background: var(--orange); color: var(--white); padding: 10px 22px; border-radius: 6px; font-weight: 700; font-size: 14px; text-decoration: none; transition: background .2s; }
+    .nav-cta:hover { background: var(--orange-light); }
+
+    .hero { min-height: 100vh; display: flex; align-items: center; padding: 120px 40px 80px; max-width: 1100px; margin: 0 auto; }
+    .hero-inner { display: grid; grid-template-columns: 1fr 420px; gap: 80px; align-items: center; width: 100%; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,90,0,0.12); border: 1px solid rgba(255,90,0,0.3); color: var(--orange); padding: 6px 14px; border-radius: 100px; font-size: 13px; font-weight: 600; margin-bottom: 28px; }
+    .hero-badge::before { content: '⚡'; }
+    .hero-headline { font-size: clamp(36px, 5vw, 58px); font-weight: 900; line-height: 1.1; letter-spacing: -2px; margin-bottom: 24px; }
+    .hero-headline .accent { color: var(--orange); }
+    .hero-sub { font-size: 18px; color: #aaaaaa; line-height: 1.7; margin-bottom: 36px; max-width: 520px; }
+    .hero-proof { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+    .proof-item { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #888; }
+    .proof-item::before { content: '✓'; color: var(--orange); font-weight: 700; }
+
+    /* FORMULÁRIO */
+    .hero-form { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 36px 32px; }
+    .form-title { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+    .form-sub { font-size: 13px; color: var(--gray); margin-bottom: 24px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #ccc; }
+    .form-group input, .form-group select {
+      width: 100%; background: #222; border: 1px solid var(--border); border-radius: 8px;
+      padding: 12px 16px; color: var(--white); font-size: 15px; font-family: 'Inter', sans-serif; outline: none; transition: border-color .2s;
+    }
+    .form-group input:focus, .form-group select:focus { border-color: var(--orange); }
+    .form-group select option { background: #222; }
+    .btn-primary { width: 100%; background: var(--orange); color: var(--white); border: none; border-radius: 8px; padding: 16px; font-size: 16px; font-weight: 800; cursor: pointer; transition: background .2s, transform .1s; letter-spacing: -0.3px; }
+    .btn-primary:hover { background: var(--orange-light); transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .form-guarantee { text-align: center; font-size: 12px; color: var(--gray); margin-top: 14px; }
+    .form-guarantee span { color: var(--orange); }
+
+    /* SUCCESS STATE */
+    .success-state { display: none; text-align: center; padding: 8px 0; }
+    .success-icon { font-size: 48px; margin-bottom: 16px; }
+    .success-title { font-size: 22px; font-weight: 900; margin-bottom: 12px; }
+    .success-text { font-size: 15px; color: #aaa; line-height: 1.7; margin-bottom: 28px; }
+    .btn-whatsapp {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: #25D366; color: #fff; border: none; border-radius: 10px;
+      padding: 16px 28px; font-size: 16px; font-weight: 800; cursor: pointer;
+      text-decoration: none; transition: background .2s, transform .1s;
+      width: 100%; justify-content: center;
+    }
+    .btn-whatsapp:hover { background: #20b858; transform: translateY(-1px); }
+    .btn-whatsapp svg { width: 22px; height: 22px; fill: white; }
+    .queue-label { font-size: 12px; color: #888; margin-top: 10px; }
+    .queue-label strong { color: var(--orange); }
+
+    /* SEÇÕES */
+    section { padding: 100px 40px; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-label { font-size: 12px; font-weight: 700; letter-spacing: 2px; color: var(--orange); text-transform: uppercase; margin-bottom: 16px; }
+    .section-title { font-size: clamp(28px, 4vw, 44px); font-weight: 900; letter-spacing: -1.5px; line-height: 1.15; margin-bottom: 20px; }
+    .section-title .accent { color: var(--orange); }
+    .section-sub { font-size: 18px; color: #aaa; max-width: 620px; line-height: 1.7; }
+
+    .pain { background: var(--dark); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .pain-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 56px; }
+    .pain-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 28px; }
+    .pain-icon { font-size: 28px; margin-bottom: 14px; }
+    .pain-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 10px; }
+    .pain-card p { font-size: 15px; color: #888; line-height: 1.65; }
+
+    .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 32px; margin-top: 60px; }
+    .step-num { font-size: 64px; font-weight: 900; color: rgba(255,90,0,0.12); line-height: 1; margin-bottom: 16px; letter-spacing: -3px; }
+    .step h3 { font-size: 18px; font-weight: 800; margin-bottom: 10px; }
+    .step p { font-size: 15px; color: #888; line-height: 1.65; }
+    .section-cta { text-align: center; margin-top: 56px; }
+    .btn-section { display: inline-block; background: var(--orange); color: #fff; padding: 16px 40px; border-radius: 8px; font-size: 16px; font-weight: 800; text-decoration: none; transition: background .2s; }
+    .btn-section:hover { background: var(--orange-light); }
+
+    .features { background: var(--dark); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; margin-top: 56px; }
+    .feature-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 28px; transition: border-color .2s; }
+    .feature-card:hover { border-color: rgba(255,90,0,0.4); }
+    .feature-icon { font-size: 32px; margin-bottom: 16px; }
+    .feature-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 10px; }
+    .feature-card p { font-size: 15px; color: #888; line-height: 1.65; }
+
+    .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-top: 56px; }
+    .testimonial { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 28px; }
+    .testimonial-stars { color: var(--orange); font-size: 16px; margin-bottom: 16px; }
+    .testimonial-text { font-size: 16px; line-height: 1.7; color: #ccc; margin-bottom: 20px; font-style: italic; }
+    .testimonial-author { display: flex; align-items: center; gap: 12px; }
+    .author-avatar { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, var(--orange), #ff8c42); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; }
+    .author-name { font-weight: 700; font-size: 14px; }
+    .author-role { font-size: 12px; color: var(--gray); }
+
+    .faq { background: var(--dark); border-top: 1px solid var(--border); }
+    .faq-list { margin-top: 56px; max-width: 780px; }
+    .faq-item { border-bottom: 1px solid var(--border); padding: 24px 0; }
+    .faq-question { font-size: 17px; font-weight: 700; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+    .faq-question::after { content: '+'; color: var(--orange); font-size: 22px; font-weight: 400; }
+    .faq-answer { font-size: 15px; color: #888; line-height: 1.7; }
+
+    .cta-section { background: linear-gradient(135deg, #111 0%, #1a0a00 100%); border-top: 1px solid rgba(255,90,0,0.2); text-align: center; }
+    .cta-section .section-title { max-width: 700px; margin: 0 auto 24px; }
+    .cta-section .section-sub { margin: 0 auto 40px; text-align: center; }
+    .cta-form-inline { display: flex; gap: 12px; max-width: 500px; margin: 0 auto; flex-wrap: wrap; justify-content: center; }
+    .cta-form-inline input { flex: 1; min-width: 220px; background: #222; border: 1px solid var(--border); border-radius: 8px; padding: 14px 18px; color: var(--white); font-size: 15px; font-family: 'Inter', sans-serif; outline: none; }
+    .cta-form-inline input:focus { border-color: var(--orange); }
+    .btn-cta-inline { background: var(--orange); color: var(--white); border: none; border-radius: 8px; padding: 14px 28px; font-size: 15px; font-weight: 800; cursor: pointer; transition: background .2s; }
+    .btn-cta-inline:hover { background: var(--orange-light); }
+    .cta-note { font-size: 13px; color: var(--gray); margin-top: 16px; }
+
+    footer { padding: 40px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; color: var(--gray); font-size: 13px; }
+    .footer-logo { font-weight: 800; color: var(--white); }
+    .footer-logo span { color: var(--orange); }
+
+    .anim { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .anim.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      .hero { padding: 100px 24px 60px; }
+      .hero-inner { grid-template-columns: 1fr; gap: 48px; }
+      section { padding: 72px 24px; }
+      .cta-form-inline { flex-direction: column; }
+      footer { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">CAVE<span>.</span>IA</div>
+  <a href="#lead-form" class="nav-cta">Quero meu agente →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <div class="hero-badge">Nova forma de operar empresas</div>
+      <h1 class="hero-headline">
+        Seu negócio ainda<br>opera no<br>
+        <span class="accent">modo manual.</span>
+      </h1>
+      <p class="hero-sub">
+        Enquanto você responde mensagens, aprova orçamentos e persegue leads perdidos —
+        existe uma camada invisível de trabalho que a IA já faz sozinha.
+        Nós implantamos essa camada na sua empresa.
+      </p>
+      <div class="hero-proof">
+        <span class="proof-item">Resposta em segundos, 24h</span>
+        <span class="proof-item">Zero contratação extra</span>
+        <span class="proof-item">Memória do seu negócio</span>
+      </div>
+    </div>
+
+    <div class="hero-form" id="lead-form">
+      <!-- FORM STATE -->
+      <div id="form-state">
+        <div class="form-title">Diagnóstico gratuito</div>
+        <div class="form-sub">Descubra o que um agente de IA faria na sua empresa em 30 minutos.</div>
+        <div class="form-group">
+          <label>Seu nome</label>
+          <input id="f-name" type="text" placeholder="Como quer ser chamado?" />
+        </div>
+        <div class="form-group">
+          <label>E-mail</label>
+          <input id="f-email" type="email" placeholder="seu@email.com" />
+        </div>
+        <div class="form-group">
+          <label>WhatsApp</label>
+          <input id="f-phone" type="tel" placeholder="(11) 99999-9999" />
+        </div>
+        <div class="form-group">
+          <label>Segmento da empresa</label>
+          <select id="f-segment">
+            <option value="" disabled selected>Selecione...</option>
+            <option>Clínica / Saúde</option>
+            <option>Imobiliária</option>
+            <option>E-commerce</option>
+            <option>Serviços / Consultoria</option>
+            <option>Varejo / Loja física</option>
+            <option>Outro</option>
+          </select>
+        </div>
+        <button class="btn-primary" id="btn-submit" onclick="submitLead()">
+          Quero o diagnóstico gratuito →
+        </button>
+        <p class="form-guarantee">🔒 Sem spam. <span>100% gratuito.</span> Você fala com um humano.</p>
+      </div>
+
+      <!-- SUCCESS STATE -->
+      <div class="success-state" id="success-state">
+        <div class="success-icon">🎉</div>
+        <div class="success-title">Parabéns por dar esse passo.</div>
+        <p class="success-text">
+          Nossa equipe recebeu seu contato e entrará em touch em breve.<br>
+          Enquanto isso, se quiser <strong>furar a fila</strong> e falar agora:
+        </p>
+        <a id="whatsapp-btn" href="#" target="_blank" class="btn-whatsapp">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Falar agora no WhatsApp
+        </a>
+        <p class="queue-label">⚡ Resposta em até <strong>5 minutos</strong> durante horário comercial</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DOR -->
+<section class="pain">
+  <div class="container">
+    <div class="section-label anim">O problema</div>
+    <h2 class="section-title anim">Você não perde para o concorrente.<br>Você perde para <span class="accent">o tempo.</span></h2>
+    <p class="section-sub anim">Toda vez que um lead espera resposta, um cliente some sem retorno ou você paga alguém pra fazer tarefas repetitivas — é dinheiro que saiu em silêncio.</p>
+    <div class="pain-grid">
+      <div class="pain-card anim">
+        <div class="pain-icon">⏳</div>
+        <h3>Leads que somem</h3>
+        <p>50% dos leads compram do primeiro que responde. Se você demora mais de 5 minutos, já perdeu a venda.</p>
+      </div>
+      <div class="pain-card anim">
+        <div class="pain-icon">🔁</div>
+        <h3>Tarefas que se repetem</h3>
+        <p>Responder a mesma dúvida 30 vezes por dia. Enviar o mesmo orçamento. Qualificar o mesmo perfil. Tudo isso pode parar hoje.</p>
+      </div>
+      <div class="pain-card anim">
+        <div class="pain-icon">💸</div>
+        <h3>Custo fixo que cresce</h3>
+        <p>Você contrata mais gente para escalar — mas a margem não acompanha. A IA escala sem aumentar o time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section>
+  <div class="container">
+    <div class="section-label anim">Processo</div>
+    <h2 class="section-title anim">Como implantamos<br><span class="accent">em 3 etapas</span></h2>
+    <div class="steps-grid">
+      <div class="step anim">
+        <div class="step-num">01</div>
+        <h3>Diagnóstico</h3>
+        <p>Em 30 minutos mapeamos onde sua operação perde tempo e dinheiro. Você sai com clareza de onde a IA entra.</p>
+      </div>
+      <div class="step anim">
+        <div class="step-num">02</div>
+        <h3>Implantação</h3>
+        <p>Configuramos o agente com a personalidade, o contexto e os processos do seu negócio. Conectamos nos canais que você já usa.</p>
+      </div>
+      <div class="step anim">
+        <div class="step-num">03</div>
+        <h3>Ativação</h3>
+        <p>O agente entra em operação. Você acompanha em tempo real o que ele responde, faz e resolve — sem precisar intervir.</p>
+      </div>
+    </div>
+    <div class="section-cta anim">
+      <a href="#lead-form" class="btn-section">Quero mapear minha operação →</a>
+    </div>
+  </div>
+</section>
+
+<!-- CAPACIDADES -->
+<section class="features">
+  <div class="container">
+    <div class="section-label anim">Capacidades</div>
+    <h2 class="section-title anim">O que seu agente<br><span class="accent">faz por você</span></h2>
+    <div class="features-grid">
+      <div class="feature-card anim">
+        <div class="feature-icon">💬</div>
+        <h3>Atende no WhatsApp 24h</h3>
+        <p>Responde perguntas, qualifica leads e agenda reuniões enquanto você dorme. Com a voz e o tom da sua empresa.</p>
+      </div>
+      <div class="feature-card anim">
+        <div class="feature-icon">🧠</div>
+        <h3>Memoriza seu negócio</h3>
+        <p>Conhece seus produtos, preços, processos e clientes. Cada conversa alimenta a memória — fica mais inteligente com o tempo.</p>
+      </div>
+      <div class="feature-card anim">
+        <div class="feature-icon">📅</div>
+        <h3>Agenda e acompanha</h3>
+        <p>Integrado à sua agenda, envia lembretes, confirma reuniões e faz follow-up automático com leads que não responderam.</p>
+      </div>
+      <div class="feature-card anim">
+        <div class="feature-icon">📊</div>
+        <h3>Relatórios sem esforço</h3>
+        <p>Consolida métricas, resume conversas e envia um briefing diário do que aconteceu — sem você precisar pedir.</p>
+      </div>
+      <div class="feature-card anim">
+        <div class="feature-icon">🔗</div>
+        <h3>Conecta suas ferramentas</h3>
+        <p>Integra com Google Calendar, planilhas, CRM, ClickUp e mais. O agente vive dentro dos sistemas que você já usa.</p>
+      </div>
+      <div class="feature-card anim">
+        <div class="feature-icon">🛡️</div>
+        <h3>Escalada inteligente</h3>
+        <p>Quando o assunto é complexo, ele avisa você no momento certo. Resolve o que pode, filtra o que só você deve ver.</p>
+      </div>
+    </div>
+    <div class="section-cta anim">
+      <a href="#lead-form" class="btn-section">Quero essas capacidades na minha empresa →</a>
+    </div>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section>
+  <div class="container">
+    <div class="section-label anim">Resultados</div>
+    <h2 class="section-title anim">O que muda depois<br><span class="accent">da implantação</span></h2>
+    <div class="testimonials-grid">
+      <div class="testimonial anim">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"Antes eu perdia 2 horas por dia só respondendo WhatsApp. Hoje o agente resolve 80% sem eu intervir. Meu faturamento no mês seguinte subiu 34%."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">M</div>
+          <div><div class="author-name">Marcelo R.</div><div class="author-role">Clínica odontológica — SP</div></div>
+        </div>
+      </div>
+      <div class="testimonial anim">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"O agente qualifica os leads antes de chegar pra mim. Só falo com quem realmente tem interesse. Minha taxa de conversão dobrou em 30 dias."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">P</div>
+          <div><div class="author-name">Paula V.</div><div class="author-role">Imobiliária — BH</div></div>
+        </div>
+      </div>
+      <div class="testimonial anim">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"Implantamos em uma semana. O ROI foi imediato: cortamos R$4.200/mês em horas pagas para tarefas que o agente faz em segundos."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">R</div>
+          <div><div class="author-name">Rafael T.</div><div class="author-role">E-commerce — RJ</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="container">
+    <div class="section-label anim">Dúvidas frequentes</div>
+    <h2 class="section-title anim">O que todo mundo<br><span class="accent">pergunta antes</span></h2>
+    <div class="faq-list">
+      <div class="faq-item anim">
+        <div class="faq-question">Preciso entender de tecnologia?</div>
+        <div class="faq-answer">Não. Você usa o agente pelo WhatsApp ou Telegram — da mesma forma que manda mensagem pra qualquer pessoa. A parte técnica é toda nossa.</div>
+      </div>
+      <div class="faq-item anim">
+        <div class="faq-question">Quanto tempo leva para implantar?</div>
+        <div class="faq-answer">Entre 3 e 7 dias úteis, dependendo da complexidade da operação. Negócios simples entram em funcionamento em 48h.</div>
+      </div>
+      <div class="faq-item anim">
+        <div class="faq-question">O agente fala com meus clientes diretamente?</div>
+        <div class="faq-answer">Sim — com a sua voz, tom e identidade. Você define o que ele pode e não pode fazer. Qualquer situação fora do escopo ele escalona pra você imediatamente.</div>
+      </div>
+      <div class="faq-item anim">
+        <div class="faq-question">E se eu quiser mudar alguma coisa?</div>
+        <div class="faq-answer">Você ajusta quando quiser. O agente aprende com o tempo e pode ser atualizado com novas informações, regras e comportamentos a qualquer momento.</div>
+      </div>
+      <div class="faq-item anim">
+        <div class="faq-question">Qual é o custo?</div>
+        <div class="faq-answer">O diagnóstico é gratuito. A implantação depende do porte e da complexidade da operação. Você recebe uma proposta clara após o diagnóstico — sem surpresas.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-section">
+  <div class="container">
+    <div class="section-label anim" style="text-align:center;">Último aviso</div>
+    <h2 class="section-title anim">Cada dia sem IA<br><span class="accent">é um dia a mais</span><br>que o concorrente leva.</h2>
+    <p class="section-sub anim">O diagnóstico é gratuito. A conversa dura 30 minutos. Se não fizer sentido pra você, não tem custo nenhum.</p>
+    <form class="cta-form-inline anim" onsubmit="submitBottom(event)">
+      <input id="cta-phone" type="tel" placeholder="Seu WhatsApp" />
+      <button class="btn-cta-inline" type="submit">Quero o diagnóstico →</button>
+    </form>
+    <p class="cta-note anim">🔒 Diagnóstico gratuito. Sem compromisso. Você fala com um humano.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">CAVE<span>.</span>IA</div>
+  <div>© 2026 CAVE Assessoria. Todos os direitos reservados.</div>
+</footer>
+
+<script>
+  // =============================================
+  // CONFIGURAÇÃO — ajustar antes de publicar
+  // =============================================
+  const CLICKUP_TOKEN = 'pk_242478067_Z3NZS3D4CG3TJNZJAHBNA2ZIYHMCQQUG';
+  const CLICKUP_LIST_ID = '901326615177';
+  // Número da CAVE no WhatsApp (formato: 5511XXXXXXXXX)
+  const CAVE_WHATSAPP = '5511977221652'; // ← ATUALIZAR com número da CAVE
+
+  async function submitLead() {
+    const name    = document.getElementById('f-name').value.trim();
+    const email   = document.getElementById('f-email').value.trim();
+    const phone   = document.getElementById('f-phone').value.trim();
+    const segment = document.getElementById('f-segment').value;
+
+    if (!name || !phone) { alert('Preencha pelo menos seu nome e WhatsApp.'); return; }
+
+    const btn = document.getElementById('btn-submit');
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+
+    try {
+      await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`, {
+        method: 'POST',
+        headers: { 'Authorization': CLICKUP_TOKEN, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: `Lead: ${name}`,
+          description: `📱 WhatsApp: ${phone}\n📧 E-mail: ${email}\n🏢 Segmento: ${segment || 'Não informado'}\n\nFonte: Landing Page Agentes IA`,
+          status: 'para solicitar',
+          custom_fields: []
+        })
+      });
+    } catch(e) { console.warn('ClickUp error (non-blocking):', e); }
+
+    showSuccess(name, phone);
+  }
+
+  function submitBottom(e) {
+    e.preventDefault();
+    const phone = document.getElementById('cta-phone').value.trim();
+    if (!phone) return;
+    const msg = encodeURIComponent('Oi! Vi a página da CAVE IA e quero entender como funciona o diagnóstico gratuito.');
+    window.open(`https://wa.me/${CAVE_WHATSAPP}?text=${msg}`, '_blank');
+  }
+
+  function showSuccess(name, phone) {
+    document.getElementById('form-state').style.display = 'none';
+    const s = document.getElementById('success-state');
+    s.style.display = 'block';
+
+    const firstName = name.split(' ')[0];
+    s.querySelector('.success-title').textContent = `Parabéns, ${firstName}! 🎉`;
+
+    const waMsg = encodeURIComponent(`Oi! Me cadastrei na página da CAVE IA e quero furar a fila. Meu WhatsApp é ${phone}.`);
+    document.getElementById('whatsapp-btn').href = `https://wa.me/${CAVE_WHATSAPP}?text=${waMsg}`;
+
+    document.getElementById('lead-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // Animações de entrada
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.anim').forEach(el => observer.observe(el));
+  document.querySelectorAll('.hero .anim').forEach(el => el.classList.add('visible'));
+</script>
+</body>
+</html>
